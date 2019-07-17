@@ -89,5 +89,4 @@ with open('coffeeList.csv','a') as f:
         target.rate,
         target.station,
         target.comment,
-        target.smoke
-        ])
+        target.smoke])
