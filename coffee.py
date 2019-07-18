@@ -13,7 +13,7 @@ class target_shop:
     smoke = ''
 
 class find_coffee(ttk.Frame):
-    index_num = 1
+    index_num = 0
     display_messages = []
 
     def __init__(self, master=None):
@@ -24,17 +24,20 @@ class find_coffee(ttk.Frame):
         def show_info():
             self.display_messages = list()
             search()
-            if len(self.display_messages) <= 0:
-                print("Nothing to show")
-            response = Message(Frame2, width=500, text=self.display_messages[self.index_num])
-            response.grid(row=0, column=0)
-            print("This is show_info message")
-            print(self.display_messages[self.index_num])
+            if self.index_num >= len(self.display_messages) :
+                self.index_num = -1
+                response = Message(Frame2, width=500, text="No result")
+                response.grid(row=0, column=0)
+            else:
+                response = Message(Frame2, width=500, text=self.display_messages[self.index_num])
+                response.grid(row=0, column=0)
+                print("This is show_info message")
+                print(self.display_messages[self.index_num])
 
         def search():
             keyword = search_word.get()
             smoking = combo.get()
-            if keyword not in '駅':
+            if '駅' not in keyword:
                 keyword = keyword + "駅"
             print("{} : {}".format(keyword, smoking))
 
@@ -58,7 +61,7 @@ class find_coffee(ttk.Frame):
                     評価 : {}
                     場所 : {}
 
-                    {}
+{}
 
                     URL : {}
                 """.format(hit.shopname, hit.rate, hit.station, "コメントなし" if hit.comment=="" else hit.comment, hit.url))
@@ -75,10 +78,12 @@ class find_coffee(ttk.Frame):
             con.close()
 
         def next_shop():
-            self.index_num+= 1
-            if self.index_num < len(self.display_messages)-1 :
-                self.index_num = 1
+            # if self.index_num > len(self.display_messages)-1 :
+            #     response = Message(Frame2, width=500, text="No result")
+            #     response.grid(row=0, column=0)
+            # else:
             show_info()
+            self.index_num += 1
 
         """ウィジェットの作成."""
         self.grid(column=0, row=0)
@@ -108,7 +113,7 @@ class find_coffee(ttk.Frame):
         combo.current(0)
         combo.grid(row=0, column=3)
 
-        button = ttk.Button(Frame1, text='検索', command=search)
+        button = ttk.Button(Frame1, text='検索', command=next_shop)
         button.grid(row=0, column=4)
 
         button = ttk.Button(Frame3, text='次のお店', command=next_shop)
